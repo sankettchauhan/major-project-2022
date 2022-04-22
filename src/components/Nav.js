@@ -3,7 +3,7 @@ import logo from "../images/logo.png";
 
 export default function Nav() {
   return (
-    <ul className="flex justify-between px-40 border-b-2 ">
+    <ul className="flex justify-between px-40 border-b-2 bg-blend-multiply ">
       <li>
         <img className="h-[80px]" src={logo} alt="maadhyam" />
       </li>

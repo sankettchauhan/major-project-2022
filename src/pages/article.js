@@ -5,6 +5,7 @@ import { firestoreDb, initializeFirebaseApp } from "../firebase/config";
 import { sampleArticle, sampleSections } from "../content";
 import Loading from "../components/Loading";
 import { makeDateReadable } from "../util";
+import BlobBackground from "../components/BlobBackground";
 
 initializeFirebaseApp();
 const db = firestoreDb();
@@ -41,27 +42,35 @@ export default function Article() {
 
   return (
     <>
-      <Nav />
-      <div className="mx-80 pt-20 capitalize text-4xl mb-8">
-        <h3 className="text-2xl text-center text-gray-500 mb-3">
-          Published on {makeDateReadable(sampleArticle.dateCreated)}
-        </h3>
-        <h1 className="text-4xl font-bold text-center">
-          {sampleArticle.title}
-        </h1>
-        {/* sections */}
-        {sampleSections.map((section, index) => {
-          return (
-            <>
-              <h2 className="text-3xl font-semibold mt-8">{section.title}</h2>
-              {section.content.map((p, index) => (
-                <p className="text-xl mt-3" key={`para-${index + 1}`}>
-                  {p}
-                </p>
-              ))}
-            </>
-          );
-        })}
+      <div>
+        <BlobBackground />
+        <Nav />
+        <div className="mx-80 pt-20 capitalize text-4xl mb-8 overflow-hidden">
+          <h3 className="text-2xl text-center text-gray-500 mb-3">
+            Published on {makeDateReadable(sampleArticle.dateCreated)}
+          </h3>
+          <h1 className="text-4xl font-bold text-center">
+            {sampleArticle?.title}
+          </h1>
+          {/* sections */}
+          {sampleSections.map((section, index) => {
+            return (
+              <>
+                <h2 className="text-3xl font-semibold mt-8 ">
+                  {section.title}
+                </h2>
+                {section.content.map((p, index) => (
+                  <p
+                    className="text-xl mt-3 normal-case font-serif"
+                    key={`para-${index + 1}`}
+                  >
+                    {p}
+                  </p>
+                ))}
+              </>
+            );
+          })}
+        </div>
       </div>
     </>
   );
