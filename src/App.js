@@ -9,16 +9,33 @@ import Article from "./pages/article";
 // import ArticleSearch from "./pages/articlesearch";
 import Home from "./pages/home";
 import "./index.css";
-import BlobBackground from "./components/BlobBackground";
+import Login from "./components/Login";
+import RequireAuth from "./components/RequireAuth";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route exact path="/article/:id" element={<Article />} />
-        <Route exact path="/blob" element={<BlobBackground />} />
+        <Route
+          exact
+          path="/article/:id"
+          element={
+            <RequireAuth>
+              <Article />
+            </RequireAuth>
+          }
+        />
         {/* <Route exact path="/article/search" element={<ArticleSearch />} /> */}
-        <Route exact path="/home" element={<Home />} />
+        <Route
+          exact
+          path="/home"
+          element={
+            <RequireAuth>
+              <Home />
+            </RequireAuth>
+          }
+        />
+        <Route exact path="/login" element={<Login />} />
         <Route path="/*" element={<Navigate to="/home" />} />
       </Routes>
     </Router>
