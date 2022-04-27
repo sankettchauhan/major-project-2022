@@ -1,9 +1,23 @@
 import React from "react";
 import logo from "../images/logo.png";
 import { useNavigate } from "react-router-dom";
+import { getAuth, signOut } from "firebase/auth";
+import { removeTokenFromLocalStorage } from "../util";
 
 export default function Nav() {
   const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    const auth = getAuth();
+    try {
+      await signOut(auth);
+      removeTokenFromLocalStorage();
+      navigate("/auth");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <ul className="flex justify-between px-40 border-b-2 bg-blend-multiply ">
       <li>
@@ -21,8 +35,11 @@ export default function Nav() {
         >
           All Articles
         </a>
-        <a className="ml-4 border-b-2 border-zinc-400 cursor-pointer">
-          Search Articles
+        <a
+          className="ml-4 border-b-2 border-zinc-400 cursor-pointer"
+          onClick={handleSignOut}
+        >
+          Signout
         </a>
       </div>
     </ul>

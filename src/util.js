@@ -27,6 +27,10 @@ export const getUser = () => {
   return decodedToken;
 };
 
+export const removeTokenFromLocalStorage = () => {
+  localStorage.removeItem(LOCAL_STORAGE_AUTH_KEY);
+};
+
 export const sortSectionCompareFunction = (a, b) => {
   if (a.order < b.order) {
     return -1;
