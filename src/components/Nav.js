@@ -4,6 +4,17 @@ import { useNavigate } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 import { removeTokenFromLocalStorage } from "../util";
 
+function NavLink({ children, onClick }) {
+  return (
+    <a
+      className="ml-4 border-b-2 border-zinc-400 cursor-pointer"
+      onClick={onClick}
+    >
+      {children}
+    </a>
+  );
+}
+
 export default function Nav() {
   const navigate = useNavigate();
 
@@ -29,18 +40,9 @@ export default function Nav() {
         />
       </li>
       <div className="flex my-auto">
-        <a
-          className="ml-4 border-b-2 border-zinc-400 cursor-pointer"
-          onClick={() => navigate("/all-articles")}
-        >
-          All Articles
-        </a>
-        <a
-          className="ml-4 border-b-2 border-zinc-400 cursor-pointer"
-          onClick={handleSignOut}
-        >
-          Signout
-        </a>
+        <NavLink onClick={() => navigate("/home")}>All articles</NavLink>
+        <NavLink onClick={() => navigate("/add-article")}>Add articles</NavLink>
+        <NavLink onClick={handleSignOut}>Signout</NavLink>
       </div>
     </ul>
   );

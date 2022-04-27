@@ -11,6 +11,7 @@ import Home from "./pages/home";
 import "./index.css";
 import Login from "./components/Login";
 import RequireAuth from "./components/RequireAuth";
+import AddArticle from "./pages/add-article";
 
 function App() {
   return (
@@ -32,6 +33,15 @@ function App() {
           element={
             <RequireAuth>
               <Home />
+            </RequireAuth>
+          }
+        />
+        <Route
+          exact
+          path="/add-article"
+          element={
+            <RequireAuth>
+              <AddArticle />
             </RequireAuth>
           }
         />
