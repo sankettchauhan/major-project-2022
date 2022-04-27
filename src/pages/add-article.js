@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import Nav from "../components/Nav";
-import { addArticle, testAddArticle, testAddSection } from "../firebase/util";
+import { testAddArticle, testAddSection } from "../firebase/util";
 import { getUser } from "../util";
 import Swal from "sweetalert2";
 import BlobBackground from "../components/BlobBackground";
