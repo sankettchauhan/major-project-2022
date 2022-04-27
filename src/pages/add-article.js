@@ -105,7 +105,7 @@ export default function AddArticle() {
           {articleId && (
             <>
               {sections.map((section, index) => (
-                <div className="mr-8 mb-8">
+                <div className="mr-8 mb-8" key={`section-${index + 1}`}>
                   <CardNewSection
                     section={section}
                     disabled={true}
