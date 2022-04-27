@@ -30,7 +30,7 @@ export default function Nav() {
   };
 
   return (
-    <ul className="flex justify-between px-40 border-b-2 bg-blend-multiply ">
+    <ul className="flex justify-between px-40 border-b-2">
       <li>
         <img
           className="h-[80px] cursor-pointer"

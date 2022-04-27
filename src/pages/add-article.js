@@ -3,6 +3,10 @@ import Nav from "../components/Nav";
 import { addArticle, testAddArticle, testAddSection } from "../firebase/util";
 import { getUser } from "../util";
 import Swal from "sweetalert2";
+import BlobBackground from "../components/BlobBackground";
+import CardNewArticle from "../components/CardNewArticle";
+import CardNewSection from "../components/CardNewSection";
+import { Button } from "../components/Button";
 
 export default function AddArticle() {
   const articleTitle = useRef("");
@@ -48,7 +52,7 @@ export default function AddArticle() {
 
   const addSection = async (e) => {
     e.preventDefault();
-    console.clear();
+    // console.clear();
     const swal = await Swal.fire({
       titleText: "Are you sure you want to continue?",
       text: `You are creating a section with title "${sectionTitle.current.value}". You can only edit it later on, after adding all sections to the article.`,
@@ -86,68 +90,51 @@ export default function AddArticle() {
 
   return (
     <>
+      <BlobBackground />
       <Nav />
-      <form className="flex flex-col container">
-        <div className="flex flex-col">
-          <p>
-            You have to create an article first, then you can add different
-            sections to it.
-          </p>
-          <input
-            type="text"
-            placeholder="Enter title of article here"
-            ref={articleTitle}
-          />
-          <button onClick={addArticle} disabled={articleId}>
-            Create Article
-          </button>
-        </div>
-        {articleId && (
-          <>
-            {sections.map((section, index) => (
-              <>
-                <input
-                  type="text"
-                  placeholder="Enter title of section here"
-                  value={section.title}
-                  disabled
-                />
-                <textarea
-                  placeholder="Enter content of section here"
-                  value={section.content}
-                  disabled
-                />
-                <input
-                  type="text"
-                  placeholder="Enter order of section here"
-                  value={section.order}
-                  disabled
-                />
-              </>
-            ))}
-            {addNewSection && (
-              <>
-                <input
-                  type="text"
-                  placeholder="Enter title of section here"
-                  ref={sectionTitle}
-                />
-                <textarea
-                  ref={sectionContent}
-                  placeholder="Enter content of section here"
-                />
-                <input
-                  type="text"
-                  ref={sectionOrder}
-                  placeholder="Enter order of section here"
-                />
-                <button onClick={addSection}>Create section</button>
-              </>
-            )}
-            <button onClick={handleAddNewSection}>Add another section</button>
-          </>
-        )}
-      </form>
+      <div className="px-40">
+        <h1 className="bold uppercase text-4xl my-4">Add a new article</h1>
+        <form className="flex flex-wrap">
+          <div className="mr-8 mb-8">
+            <CardNewArticle
+              articleTitle={articleTitle}
+              addArticle={addArticle}
+              articleId={articleId}
+            />
+          </div>
+          {articleId && (
+            <>
+              {sections.map((section, index) => (
+                <div className="mr-8 mb-8">
+                  <CardNewSection
+                    section={section}
+                    disabled={true}
+                    stepNumber={index + 2}
+                  />
+                </div>
+              ))}
+              {addNewSection && (
+                <>
+                  <div className="mr-8 mb-8">
+                    <CardNewSection
+                      sectionTitleRef={sectionTitle}
+                      sectionContentRef={sectionContent}
+                      sectionOrderRef={sectionOrder}
+                      stepNumber={sections.length + 2}
+                      addSection={addSection}
+                    />
+                  </div>
+                </>
+              )}
+              <div>
+                <Button onClick={handleAddNewSection}>
+                  + Add another section
+                </Button>
+              </div>
+            </>
+          )}
+        </form>
+      </div>
     </>
   );
 }
