@@ -7,7 +7,7 @@ import { removeTokenFromLocalStorage } from "../util";
 function NavLink({ children, onClick }) {
   return (
     <a
-      className="ml-4 border-b-2 border-zinc-400 cursor-pointer"
+      className="ml-4 border-b-2 border-zinc-400 cursor-pointer capitalize"
       onClick={onClick}
     >
       {children}
