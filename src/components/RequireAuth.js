@@ -1,14 +1,15 @@
 import { useJwt } from "react-jwt";
 import { Navigate, useLocation } from "react-router-dom";
-import { useAuth } from "../util";
+import { getToken } from "../util";
 // enclose the protected page in this tag
 export default function RequireAuth({ children }) {
   //   get token from local storage
   let location = useLocation();
-  let token = useAuth();
-  //   token = "a";
+  let token = getToken();
   const { decodedToken, isExpired } = useJwt(token);
-  console.log(location);
+  console.log("redirected from: ", location);
+  console.log("token: ", token);
+  console.log("is expired: ", isExpired);
 
   // error - when token is not in local storage
   if (!token) {
@@ -23,6 +24,7 @@ export default function RequireAuth({ children }) {
   if (isExpired) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
+  console.log("decoded token: ", decodedToken);
 
   return children;
 }

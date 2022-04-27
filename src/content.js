@@ -2,6 +2,7 @@ export const sampleArticle = {
   title: "article title",
   id: "1234",
   dateCreated: "Fri Apr 20 2022 11:58:02 GMT+0530 (India Standard Time)",
+  userId: "4oIlmJxrDFX1zKwjCCerjrzUAFA3",
 };
 export const sampleSections = [
   {

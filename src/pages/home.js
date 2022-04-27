@@ -17,7 +17,7 @@ export default function Home() {
     // loads all the articles in the db
     async function load() {
       try {
-        const articlesRef = collection(db, "articles");
+        const articlesRef = collection(db, "new_articles");
         const q = query(articlesRef, orderBy("title"));
         const querySnapshot = await getDocs(q);
         // const querySnapshot = await getDocs(collection(db, "articles"));

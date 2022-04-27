@@ -61,7 +61,6 @@ export default function BlobBackground() {
     // let blob = blobs[Math.floor(Math.random() * blobs.length)];
     const color = colors[Math.floor(Math.random() * colors.length)];
     const blobsArray = blobsCreator(color);
-    console.log(blobsArray);
     return blobsArray;
   };
   const blobs = getBlobs();
