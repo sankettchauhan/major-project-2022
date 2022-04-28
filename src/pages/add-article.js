@@ -1,11 +1,6 @@
 import { useRef, useState } from "react";
 import Nav from "../components/Nav";
-import {
-  addArticleInFB,
-  addSectionInFB,
-  testAddArticle,
-  testAddSection,
-} from "../firebase/util";
+import { addArticleInFB, addSectionInFB } from "../firebase/util";
 import { getUser } from "../util";
 import BlobBackground from "../components/BlobBackground";
 import CardNewArticle from "../components/CardNewArticle";

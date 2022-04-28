@@ -4,12 +4,10 @@ import {
   deleteDoc,
   doc,
   getDocs,
-  getFirestore,
-  initializeFirestore,
   query,
   where,
 } from "firebase/firestore";
-import { db, firebaseConfig, initializeFirebaseApp } from "./config";
+import { db } from "./config";
 
 // queryss, setstate
 export const setStateToFBResponse = (querySnapshot, setState) => {

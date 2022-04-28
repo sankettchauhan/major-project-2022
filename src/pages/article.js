@@ -1,6 +1,5 @@
 import {
   collection,
-  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -73,7 +72,7 @@ export default function Article() {
     // sort sections in state because order by query was giving some issues
     if (sections.length > 0)
       setSections((sections) => sections.sort(sortSectionCompareFunction));
-  }, []);
+  }, [articleId, sections]);
   if (loading) return <Loading />;
 
   const handleDeleteArticle = async (e) => {
