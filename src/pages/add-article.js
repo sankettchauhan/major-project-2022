@@ -1,12 +1,17 @@
 import { useRef, useState } from "react";
 import Nav from "../components/Nav";
-import { testAddArticle, testAddSection } from "../firebase/util";
+import {
+  addArticleInFB,
+  addSectionInFB,
+  testAddArticle,
+  testAddSection,
+} from "../firebase/util";
 import { getUser } from "../util";
-import Swal from "sweetalert2";
 import BlobBackground from "../components/BlobBackground";
 import CardNewArticle from "../components/CardNewArticle";
 import CardNewSection from "../components/CardNewSection";
 import { Button } from "../components/Button";
+import { addArticleSwal, addSectionSwal } from "../swalUtil";
 
 export default function AddArticle() {
   const articleTitle = useRef("");
@@ -20,19 +25,12 @@ export default function AddArticle() {
   const addArticle = async (e) => {
     e.preventDefault();
     console.clear();
-    const swal = await Swal.fire({
-      titleText: "Are you sure you want to continue?",
-      text: `You are creating an article with title "${articleTitle.current.value}". You can only edit it later on, after adding all sections to the article.`,
-      icon: "warning",
-      confirmButtonText: "Yes",
-      denyButtonText: "No",
-      showDenyButton: true,
-    });
+    const swal = await addArticleSwal(articleTitle.current.value);
 
     if (!swal.isConfirmed) return;
 
-    console.log("swal object: ", swal);
-    console.log("swal is confirmed?: ", swal.isConfirmed);
+    console.log("addArticleSwal object: ", swal);
+    console.log("addArticleSwal is confirmed?: ", swal.isConfirmed);
 
     const { user_id } = getUser();
     const article = {
@@ -43,8 +41,8 @@ export default function AddArticle() {
     };
     console.log("article from form: ", article);
 
-    const articleInFB = await testAddArticle(article);
-    // const articleInFB = await addArticle(article);
+    // const articleInFB = await testAddArticle(article);
+    const articleInFB = await addArticleInFB(article);
 
     console.log("article in FB: ", articleInFB);
     setArticleId(articleInFB.id);
@@ -53,20 +51,13 @@ export default function AddArticle() {
   const addSection = async (e) => {
     e.preventDefault();
     // console.clear();
-    const swal = await Swal.fire({
-      titleText: "Are you sure you want to continue?",
-      text: `You are creating a section with title "${sectionTitle.current.value}". You can only edit it later on, after adding all sections to the article.`,
-      icon: "warning",
-      confirmButtonText: "Yes",
-      denyButtonText: "No",
-      showDenyButton: true,
-    });
+    const swal = await addSectionSwal(sectionTitle.current.valu);
 
     if (!swal.isConfirmed) return;
     // TODO: convert content string to array
     const section = {
       title: sectionTitle.current.value,
-      content: sectionContent.current.value,
+      content: sectionContent.current.value.split("\n"),
       order: sectionOrder.current.value,
       // get article id after creation of document in firebase
       articleId: articleId,
@@ -74,7 +65,9 @@ export default function AddArticle() {
     console.clear();
     console.log("section from form: ", section);
 
-    const sectionInFB = await testAddSection(section);
+    // const sectionInFB = await testAddSection(section);
+    const sectionInFB = await addSectionInFB(section);
+
     setSections((state) => state.concat(section));
     setAddNewSection(false);
     // const aectionInFB = await addArticle(section);

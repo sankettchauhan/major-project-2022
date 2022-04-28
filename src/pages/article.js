@@ -1,9 +1,9 @@
 import {
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
-  orderBy,
   query,
   where,
 } from "firebase/firestore";
@@ -13,9 +13,17 @@ import { firestoreDb, initializeFirebaseApp } from "../firebase/config";
 import Loading from "../components/Loading";
 import { getUser, makeDateReadable, sortSectionCompareFunction } from "../util";
 import BlobBackground from "../components/BlobBackground";
-import { decodeToken, useJwt } from "react-jwt";
 import { useLocation, useNavigate } from "react-router-dom";
-import { setStateToFBResponse } from "../firebase/util";
+import {
+  deleteArticleAndSections,
+  setStateToFBResponse,
+} from "../firebase/util";
+import {
+  deleteArticleConfirmationSwal,
+  deleteArticleDeclinedSwal,
+  deleteArticleErrorSwal,
+  deleteArticleSuccessSwal,
+} from "../swalUtil";
 
 initializeFirebaseApp();
 const db = firestoreDb();
@@ -24,22 +32,21 @@ export default function Article() {
   const [article, setArticle] = useState({});
   const [sections, setSections] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState({});
 
-  const { user_id } = getUser();
-  console.log("user id: ", user_id);
-
-  const nav = useNavigate();
   const location = useLocation();
+  const navigate = useNavigate();
+  const articleId = location.pathname.split("/")[2];
+
   console.log(location);
+  console.log("user: ", user);
   console.log("article: ", article);
   console.log("sections: ", sections);
-  console.log("sorted sections: ", sections.sort(sortSectionCompareFunction));
 
   useEffect(() => {
     //    needs content from article and section collections
     async function load() {
       //  get article id
-      const articleId = location.pathname.split("/")[2];
       try {
         const articleDocRef = doc(db, "new_articles", articleId);
         const articleDocSnap = await getDoc(articleDocRef);
@@ -55,6 +62,7 @@ export default function Article() {
         const querySnapshot = await getDocs(q);
         // const querySnapshot = await getDocs(collection(db, "articles"));
         setStateToFBResponse(querySnapshot, setSections);
+        setUser(getUser());
       } catch (err) {
         console.log("Error: ", err);
       } finally {
@@ -62,31 +70,61 @@ export default function Article() {
       }
     }
     load();
+    // sort sections in state because order by query was giving some issues
     if (sections.length > 0)
       setSections((sections) => sections.sort(sortSectionCompareFunction));
   }, []);
   if (loading) return <Loading />;
+
+  const handleDeleteArticle = async (e) => {
+    e.preventDefault();
+
+    // show alert
+    const swal = await deleteArticleConfirmationSwal(article.title);
+    console.log("article title from handle delete: ", article.title);
+    console.log("swal from handle delete: ", swal);
+    // if declined so revert
+    if (!swal.isConfirmed) {
+      deleteArticleDeclinedSwal(article.title);
+      return;
+    }
+
+    const isArticleDeleted = await deleteArticleAndSections(articleId);
+    console.log("is article deleted: ", isArticleDeleted);
+
+    // some error occured
+    if (!isArticleDeleted) {
+      // error alert
+      deleteArticleErrorSwal(article.title);
+      return;
+    }
+
+    // success alert, nav to home page
+    deleteArticleSuccessSwal(article.title);
+    navigate("/");
+  };
 
   return (
     <>
       <div>
         <BlobBackground />
         <Nav />
-        <div className="mx-80 pt-20 capitalize text-4xl mb-8 overflow-hidden">
+        <div className="mx-80 pt-20 capitalize mb-8 overflow-hidden">
           <h3 className="text-2xl text-center text-gray-500 mb-3">
             Published on {makeDateReadable(article.dateCreated)}
           </h3>
           <h1 className="text-4xl font-bold text-center">{article?.title}</h1>
+          <h3 className="text-xl mt-2 text-center text-gray-500 mb-3">
+            By {user.name}
+          </h3>
           {/* sections */}
           {sections.map((section, index) => {
             return (
-              <>
-                <h2
-                  className="text-3xl font-semibold mt-8"
-                  key={`article-${section.articleId}-section-${index + 1}`}
-                >
-                  {section.title}
-                </h2>
+              <div
+                className="mt-8"
+                key={`article-${section.articleId}-section-${index + 1}`}
+              >
+                <h2 className="text-3xl font-semibold">{section.title}</h2>
                 {section.content.map((p, index) => (
                   <p
                     className="text-xl mt-3 normal-case font-serif"
@@ -95,9 +133,19 @@ export default function Article() {
                     {p}
                   </p>
                 ))}
-              </>
+              </div>
             );
           })}
+          {article && (
+            <div className="mt-8">
+              <button
+                className="px-4 py-2 border-2 border-black rounded-md font-semibold uppercase mr-4 hover:bg-black hover:text-white transition"
+                onClick={handleDeleteArticle}
+              >
+                delete article
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </>
