@@ -7,7 +7,7 @@ import { removeTokenFromLocalStorage } from "../util";
 function NavLink({ children, onClick }) {
   return (
     <button
-      className="ml-4 border-b-2 border-zinc-400 cursor-pointer capitalize"
+      className="ml-8 cursor-pointer capitalize text-black"
       onClick={onClick}
     >
       {children}
@@ -15,7 +15,7 @@ function NavLink({ children, onClick }) {
   );
 }
 
-export default function Nav() {
+export default function Nav({ bg }) {
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -30,7 +30,11 @@ export default function Nav() {
   };
 
   return (
-    <ul className="flex justify-between px-40 border-b-2">
+    <ul
+      className={`flex justify-between px-40 border-b-[1px]  ${
+        bg && `${bg}  border-black`
+      }`}
+    >
       <li>
         <img
           className="h-[80px] cursor-pointer"
@@ -40,7 +44,10 @@ export default function Nav() {
         />
       </li>
       <div className="flex my-auto">
-        <NavLink onClick={() => navigate("/home")}>All articles</NavLink>
+        <NavLink onClick={() => navigate("/")}>Home</NavLink>
+        <NavLink onClick={() => navigate("/all-articles")}>
+          All articles
+        </NavLink>
         <NavLink onClick={() => navigate("/add-article")}>Add articles</NavLink>
         <NavLink onClick={handleSignOut}>Signout</NavLink>
       </div>

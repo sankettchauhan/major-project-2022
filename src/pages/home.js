@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getArticles, getSections } from "../firebase/util";
 import Nav from "../components/Nav";
-import ArticleCard from "../components/ArticleCard";
+import HomeArticleCard from "../components/HomeArticleCard";
 import Loading from "../components/Loading";
 
 export default function Home() {
@@ -20,10 +20,8 @@ export default function Home() {
         setArticles(articlesFromFB);
 
         setSections({});
-        articles.forEach(async ({ id }) => {
-          console.log("getting sections..");
+        articlesFromFB.forEach(async ({ id }) => {
           const sectionsFromFB = await getSections(id);
-          console.log("sections from FB: ", sectionsFromFB);
           setSections((oldState) => ({ ...oldState, [id]: sectionsFromFB }));
         });
       } catch (err) {
@@ -39,13 +37,34 @@ export default function Home() {
 
   return (
     <>
-      <Nav />
+      <Nav bg="bg-[#ffc017]" />
+      <div className="flex px-40 bg-[#ffc017]">
+        <div className="flex-1 flex flex-col justify-center">
+          <h1 className="text-7xl font-[gt-super] tracking-tight mb-4">
+            Stay curious.
+          </h1>
+          <h2 className="text-2xl pr-32 font-[Helvetica]">
+            Discover stories, thinking and expertise from writers on any topic.
+          </h2>
+        </div>
+        <div className="flex-1">
+          <img src="../read-removebg.png" alt="read" />
+        </div>
+      </div>
       {/* container */}
-      <div className="px-40 mt-6">
-        <div></div>
-        {articles?.map((article, index) => (
-          <ArticleCard key={article.id} {...article} />
-        ))}
+      <h1 className=" px-40 mt-8 text-center font-[gt-super] text-6xl">
+        Published Articles
+      </h1>
+      <div className="px-40 mt-6 mb-8 flex gap-8">
+        {Object.keys(sections).length > 0 &&
+          articles?.map((article, index) => (
+            <div className="basis-1/2" key={article.id}>
+              <HomeArticleCard
+                article={article}
+                sections={sections[article.id]}
+              />
+            </div>
+          ))}
       </div>
     </>
   );
