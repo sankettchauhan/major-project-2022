@@ -3,6 +3,7 @@ import { getArticles, getSections } from "../firebase/util";
 import Nav from "../components/Nav";
 import HomeArticleCard from "../components/HomeArticleCard";
 import Loading from "../components/Loading";
+import Footer from "../components/Footer";
 
 export default function Home() {
   const [articles, setArticles] = useState([]);
@@ -52,20 +53,23 @@ export default function Home() {
         </div>
       </div>
       {/* container */}
-      <h1 className=" px-40 mt-8 text-center font-[gt-super] text-6xl">
-        Published Articles
-      </h1>
-      <div className="px-40 mt-6 mb-8 flex gap-8">
-        {Object.keys(sections).length > 0 &&
-          articles?.map((article, index) => (
-            <div className="basis-1/2" key={article.id}>
-              <HomeArticleCard
-                article={article}
-                sections={sections[article.id]}
-              />
-            </div>
-          ))}
+      <div className="my-32 ">
+        <h1 className="mb-16 px-40 text-center font-[gt-super] text-6xl">
+          Published Articles
+        </h1>
+        <div className="px-40 mt-6 mb-8 grid grid-cols-2 gap-8">
+          {Object.keys(sections).length > 0 &&
+            articles?.map((article, index) => (
+              <div key={article.id}>
+                <HomeArticleCard
+                  article={article}
+                  sections={sections[article.id]}
+                />
+              </div>
+            ))}
+        </div>
       </div>
+      <Footer />
     </>
   );
 }

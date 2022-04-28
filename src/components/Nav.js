@@ -2,7 +2,7 @@ import React from "react";
 import logo from "../images/logo.png";
 import { useNavigate } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
-import { removeTokenFromLocalStorage } from "../util";
+import { handleSignOut, removeTokenFromLocalStorage } from "../util";
 
 function NavLink({ children, onClick }) {
   return (
@@ -17,17 +17,6 @@ function NavLink({ children, onClick }) {
 
 export default function Nav({ bg }) {
   const navigate = useNavigate();
-
-  const handleSignOut = async () => {
-    const auth = getAuth();
-    try {
-      await signOut(auth);
-      removeTokenFromLocalStorage();
-      navigate("/auth");
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   return (
     <ul
@@ -49,7 +38,7 @@ export default function Nav({ bg }) {
           All articles
         </NavLink>
         <NavLink onClick={() => navigate("/add-article")}>Add articles</NavLink>
-        <NavLink onClick={handleSignOut}>Signout</NavLink>
+        <NavLink onClick={() => handleSignOut(navigate)}>Signout</NavLink>
       </div>
     </ul>
   );

@@ -1,3 +1,4 @@
+import { getAuth, signOut } from "firebase/auth";
 import { decodeToken } from "react-jwt";
 
 const LOCAL_STORAGE_AUTH_KEY = "major-project-user";
@@ -39,4 +40,15 @@ export const sortSectionCompareFunction = (a, b) => {
     return 1;
   }
   return 0;
+};
+
+export const handleSignOut = async (navigate) => {
+  const auth = getAuth();
+  try {
+    await signOut(auth);
+    removeTokenFromLocalStorage();
+    navigate("/auth");
+  } catch (error) {
+    console.error(error);
+  }
 };
