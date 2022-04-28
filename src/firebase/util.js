@@ -4,6 +4,7 @@ import {
   deleteDoc,
   doc,
   getDocs,
+  orderBy,
   query,
   where,
 } from "firebase/firestore";
@@ -23,6 +24,39 @@ export const setStateToFBResponse = (querySnapshot, setState) => {
       ])
     );
   });
+};
+
+export const getArticles = async () => {
+  const articles = [];
+
+  const articlesRef = collection(db(), "new_articles");
+  const q = query(articlesRef, orderBy("title"));
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    const data = doc.data();
+    const id = doc.id;
+    articles.push({ ...data, id });
+  });
+  return articles;
+};
+
+// get sections of an article
+export const getSections = async (articleId) => {
+  const sections = [];
+
+  const sectionsRef = collection(db(), "sections");
+  const q = query(
+    sectionsRef,
+    where("articleId", "==", articleId),
+    orderBy("order")
+  );
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    const data = doc.data();
+    const id = doc.id;
+    sections.push({ ...data, id });
+  });
+  return sections;
 };
 
 export const addArticleInFB = (article) =>

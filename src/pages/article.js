@@ -15,6 +15,7 @@ import BlobBackground from "../components/BlobBackground";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   deleteArticleAndSections,
+  getSections,
   setStateToFBResponse,
 } from "../firebase/util";
 import {
@@ -45,7 +46,6 @@ export default function Article() {
   useEffect(() => {
     //    needs content from article and section collections
     async function load() {
-      //  get article id
       try {
         const articleDocRef = doc(db, "new_articles", articleId);
         const articleDocSnap = await getDoc(articleDocRef);
@@ -56,11 +56,10 @@ export default function Article() {
         }
         setArticle(articleDocSnap.data());
 
-        const sectionsRef = collection(db, "sections");
-        const q = query(sectionsRef, where("articleId", "==", articleId));
-        const querySnapshot = await getDocs(q);
-        // const querySnapshot = await getDocs(collection(db, "articles"));
-        setStateToFBResponse(querySnapshot, setSections);
+        const sectionsFromFB = await getSections(articleId);
+        console.log("sections from FB: ", sectionsFromFB);
+        setSections(sectionsFromFB);
+
         setUser(getUser());
       } catch (err) {
         console.log("Error: ", err);
@@ -72,7 +71,7 @@ export default function Article() {
     // sort sections in state because order by query was giving some issues
     if (sections.length > 0)
       setSections((sections) => sections.sort(sortSectionCompareFunction));
-  }, [articleId, sections]);
+  }, [articleId]);
   if (loading) return <Loading />;
 
   const handleDeleteArticle = async (e) => {

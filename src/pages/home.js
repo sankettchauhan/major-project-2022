@@ -1,27 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { firestoreDb, initializeFirebaseApp } from "../firebase/config";
-import { collection, getDocs, query, orderBy } from "firebase/firestore";
-import { setStateToFBResponse } from "../firebase/util";
+import { getArticles, getSections } from "../firebase/util";
 import Nav from "../components/Nav";
 import ArticleCard from "../components/ArticleCard";
 import Loading from "../components/Loading";
 
-initializeFirebaseApp();
-const db = firestoreDb();
-
 export default function Home() {
   const [articles, setArticles] = useState([]);
+  const [sections, setSections] = useState({});
   const [loading, setLoading] = useState(true);
 
+  console.log("articles: ", articles);
+  console.log("sections: ", sections);
+
   useEffect(() => {
-    // loads all the articles in the db
     async function load() {
       try {
-        const articlesRef = collection(db, "new_articles");
-        const q = query(articlesRef, orderBy("title"));
-        const querySnapshot = await getDocs(q);
-        // const querySnapshot = await getDocs(collection(db, "articles"));
-        setStateToFBResponse(querySnapshot, setArticles);
+        const articlesFromFB = await getArticles();
+        console.log("articles from FB: ", articlesFromFB);
+        setArticles(articlesFromFB);
+
+        setSections({});
+        articles.forEach(async ({ id }) => {
+          console.log("getting sections..");
+          const sectionsFromFB = await getSections(id);
+          console.log("sections from FB: ", sectionsFromFB);
+          setSections((oldState) => ({ ...oldState, [id]: sectionsFromFB }));
+        });
       } catch (err) {
         console.log("Error: ", err);
       } finally {
@@ -38,6 +42,7 @@ export default function Home() {
       <Nav />
       {/* container */}
       <div className="px-40 mt-6">
+        <div></div>
         {articles?.map((article, index) => (
           <ArticleCard key={article.id} {...article} />
         ))}

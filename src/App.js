@@ -12,6 +12,7 @@ import "./index.css";
 import Login from "./components/Login";
 import RequireAuth from "./components/RequireAuth";
 import AddArticle from "./pages/add-article";
+import AllArticles from "./pages/all-articles";
 
 function App() {
   return (
@@ -42,6 +43,15 @@ function App() {
           element={
             <RequireAuth>
               <AddArticle />
+            </RequireAuth>
+          }
+        />
+        <Route
+          exact
+          path="/all-articles"
+          element={
+            <RequireAuth>
+              <AllArticles />
             </RequireAuth>
           }
         />
