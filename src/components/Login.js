@@ -2,7 +2,7 @@ import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { saveUser } from "../util";
 import GoogleIcon from "./GoogleIcon";
-
+import bg from "../images/library.jpg";
 // login the user
 // save uid in local storage
 
@@ -34,14 +34,44 @@ export default function Login() {
     }
   };
   return (
-    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-1000">
-      <div className="px-8 py-20 bg-red-100">
-        <button className="flex p-3 border-2 rounded-lg" onClick={handleAuth}>
+    <div
+      className={`h-screen w-screen relative grid place-content-center text-white`}
+    >
+      <img
+        src={bg}
+        alt="library"
+        className="absolute -z-10 h-screen w-screen object-cover"
+      />
+      <div className="z-10 glass-card px-16 py-20">
+        <h1 className="text-2xl mb-4 font-bold leading-[0.8]">
+          Login to <span className="font-[gt-super]">Maadhyam</span>
+        </h1>
+        <button
+          className="flex py-3 px-6 rounded-lg bg-white text-black mb-4"
+          onClick={handleAuth}
+        >
           <span>
             <GoogleIcon />
           </span>
           <span className="ml-2">SIGN IN WITH GOOGLE</span>
         </button>
+        <h1>or</h1>
+        <h1 className="text-2xl mb-4 font-bold">Continue with email</h1>
+        <div className="flex flex-col">
+          <input
+            className="mb-2 rounded-md px-4 py-2 text-black"
+            type="text"
+            placeholder="Enter email"
+          />
+          <input
+            className="mb-2 rounded-md px-4 py-2 text-black"
+            type="password"
+            placeholder="Enter password"
+          />
+          <button className="bg-white text-black uppercase w-[fit-content] px-4 py-1 rounded-md">
+            Submit
+          </button>
+        </div>
       </div>
     </div>
   );
