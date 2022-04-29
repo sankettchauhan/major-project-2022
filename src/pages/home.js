@@ -39,7 +39,8 @@ export default function Home() {
   return (
     <>
       <Nav bg="bg-[#ffc017]" />
-      <div className="flex px-40 bg-[#ffc017]">
+      {/* hero */}
+      <div className="flex px-40 bg-[#ffc017] py-16">
         <div className="flex-1 flex flex-col justify-center">
           <h1 className="text-7xl font-[gt-super] tracking-tight mb-4">
             Stay curious.
