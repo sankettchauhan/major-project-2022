@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { firestoreDb, initializeFirebaseApp } from "../firebase/config";
-import { collection, getDocs, query, orderBy } from "firebase/firestore";
-import { getArticles, setStateToFBResponse } from "../firebase/util";
+import { getArticles } from "../firebase/util";
 import Nav from "../components/Nav";
 import ArticleCard from "../components/ArticleCard";
 import Loading from "../components/Loading";
-
-initializeFirebaseApp();
-const db = firestoreDb();
 
 export default function AllArticles() {
   const [articles, setArticles] = useState([]);

@@ -3,6 +3,7 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
   orderBy,
   query,
@@ -39,6 +40,8 @@ export const getArticles = async () => {
   });
   return articles;
 };
+
+export const retrieveArticle = (id) => getDoc(doc(db(), "new_articles", id));
 
 // get sections of an article
 export const getSections = async (articleId) => {

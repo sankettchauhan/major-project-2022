@@ -50,3 +50,10 @@ export const deleteArticleSuccessSwal = (title) =>
     text: `Article with title "${title}" was deleted successfully`,
     icon: "success",
   });
+
+export const noArticleFoundSwal = () =>
+  Swal.fire({
+    titleText: `No article was found.`,
+    text: `An error occured. No article was found for the given article id.`,
+    icon: "error",
+  });

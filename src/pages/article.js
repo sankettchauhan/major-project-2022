@@ -1,11 +1,4 @@
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import Nav from "../components/Nav";
 import { firestoreDb, initializeFirebaseApp } from "../firebase/config";
@@ -16,13 +9,14 @@ import { useLocation, useNavigate } from "react-router-dom";
 import {
   deleteArticleAndSections,
   getSections,
-  setStateToFBResponse,
+  retrieveArticle,
 } from "../firebase/util";
 import {
   deleteArticleConfirmationSwal,
   deleteArticleDeclinedSwal,
   deleteArticleErrorSwal,
   deleteArticleSuccessSwal,
+  noArticleFoundSwal,
 } from "../swalUtil";
 
 initializeFirebaseApp();
@@ -47,14 +41,15 @@ export default function Article() {
     //    needs content from article and section collections
     async function load() {
       try {
-        const articleDocRef = doc(db, "new_articles", articleId);
-        const articleDocSnap = await getDoc(articleDocRef);
-
-        if (!articleDocSnap.exists) {
-          // doc.data() will be undefined in this case
-          console.log("No such doc exists!!");
+        console.clear();
+        const articleFromFB = await retrieveArticle(articleId);
+        console.log("articel from FB: ", articleFromFB.data());
+        if (!articleFromFB.data()) {
+          await noArticleFoundSwal();
+          navigate("/");
+          return;
         }
-        setArticle(articleDocSnap.data());
+        setArticle(articleFromFB.data());
 
         const sectionsFromFB = await getSections(articleId);
         console.log("sections from FB: ", sectionsFromFB);
@@ -62,7 +57,7 @@ export default function Article() {
 
         setUser(getUser());
       } catch (err) {
-        console.log("Error: ", err);
+        console.error("Error: ", err);
       } finally {
         setLoading(false);
       }
@@ -109,7 +104,7 @@ export default function Article() {
         <Nav />
         <div className="mx-80 pt-20 capitalize mb-8 overflow-hidden">
           <h3 className="text-2xl text-center text-gray-500 mb-3">
-            Published on {makeDateReadable(article.dateCreated)}
+            Published on {makeDateReadable(article?.dateCreated)}
           </h3>
           <h1 className="text-4xl font-bold text-center">{article?.title}</h1>
           <h3 className="text-xl mt-2 text-center text-gray-500 mb-3">
