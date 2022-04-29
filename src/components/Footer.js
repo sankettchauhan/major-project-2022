@@ -13,8 +13,14 @@ export default function Footer() {
 
   const aboutLinks = [
     { name: "Contact us", href: "mailto:sanket.chuahan4@gmail.com" },
-    { name: "LinkedIn (Sanket Chauhan)", href: "https://google.com" },
-    { name: "LinkedIn (Priyanshu Singh)", href: "google.com" },
+    {
+      name: "LinkedIn (Sanket Chauhan)",
+      href: "https://www.linkedin.com/in/sanket-chauhan/",
+    },
+    {
+      name: "LinkedIn (Priyanshu Singh)",
+      href: "https://www.linkedin.com/in/priyanshu-singhh/",
+    },
   ];
   return (
     <>
