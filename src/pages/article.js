@@ -1,6 +1,6 @@
-import { doc, getDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import Nav from "../components/Nav";
+import Footer from "../components/Footer";
 import { firestoreDb, initializeFirebaseApp } from "../firebase/config";
 import Loading from "../components/Loading";
 import { getUser, makeDateReadable, sortSectionCompareFunction } from "../util";
@@ -140,6 +140,7 @@ export default function Article() {
             </div>
           )}
         </div>
+        <Footer />
       </div>
     </>
   );

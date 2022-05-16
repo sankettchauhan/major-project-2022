@@ -7,6 +7,7 @@ import CardNewArticle from "../components/CardNewArticle";
 import CardNewSection from "../components/CardNewSection";
 import { Button } from "../components/Button";
 import { addArticleSwal, addSectionSwal } from "../swalUtil";
+import Footer from "../components/Footer";
 
 export default function AddArticle() {
   const articleTitle = useRef("");
@@ -123,6 +124,7 @@ export default function AddArticle() {
           )}
         </form>
       </div>
+      <Footer />
     </>
   );
 }
