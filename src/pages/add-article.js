@@ -81,7 +81,7 @@ export default function AddArticle() {
     <>
       <BlobBackground />
       <Nav />
-      <div className="px-40">
+      <div className="px-40 mb-16">
         <h1 className="bold uppercase text-4xl my-4">Add a new article</h1>
         <form className="flex flex-wrap">
           <div className="mr-8 mb-8">
